@@ -13,6 +13,7 @@ class RoguelikeAppAdapter(val config: Configuration) : ApplicationAdapter() {
 
         EventRouter.subscribe(player)
         EventRouter.subscribe(render)
+        EventRouter.subscribe(Logger(System.out))
         level.mobs.forEach { it ->
             run {
                 EventRouter.subscribe(it)
