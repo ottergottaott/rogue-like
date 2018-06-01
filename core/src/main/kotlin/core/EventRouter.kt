@@ -1,8 +1,11 @@
 package core
 
 import squidpony.squidmath.Coord
-import javax.swing.text.StyledEditorKit
 
+/**
+ * Interface representing listener of events,
+ * every entity should implement this interface
+ */
 interface Listener {
     fun onPlayerMoveListener(oldCoord: Coord, newCoord: Coord, visible: Array<DoubleArray>) {}
 
@@ -33,70 +36,112 @@ enum class MoveType {
     DOWN, UP, LEFT, RIGHT
 }
 
-object EventRouter {
+
+/**
+ * Interface representing abstract router
+ */
+interface EventRouter {
+    fun numKeyPress(numKey: Int, alt: Boolean)
+
+    fun subscribe(listener: Listener)
+
+    fun unsubscribe(listener: Listener)
+
+    fun playerMove(oldCoord: Coord, newCoord: Coord, visible: Array<DoubleArray>)
+
+    fun playerMoved(oldCoord: Coord, newCoord: Coord)
+
+    fun mobDead(id: String)
+
+    fun mobMove(id: String, oldCoord: Coord, newCoord: Coord)
+
+    fun mobMoved(id: String, oldCoord: Coord, newCoord: Coord)
+
+    fun mobAttack(id: String)
+
+    fun playerAttack(playerCoord: Coord, mobCoord: Coord)
+
+    fun moveKeyPress(moveType: MoveType, alt: Boolean)
+
+    fun collision(oldCoord: Coord, newCoord: Coord)
+
+    fun interactWithItem(id: Item)
+
+    fun raiseItem(item: Item)
+
+    fun dropItem(item: Item)
+
+    fun drawInventory(inventory: Inventory)
+}
+
+/**
+ * Main router of events, every entity should be subscribed
+ * to this router.
+ */
+class MainRouter : EventRouter{
     private var listeners: List<Listener> = listOf()
 
-    fun numKeyPress(numKey: Int, alt: Boolean) {
+    override fun numKeyPress(numKey: Int, alt: Boolean) {
         listeners.forEach { it -> it.onNumKeyPressed(numKey, alt) }
     }
 
-    fun subscribe(listener: Listener) {
+    override fun subscribe(listener: Listener) {
         listeners += listener
     }
 
-    fun unsubscribe(listener: Listener) {
+    override fun unsubscribe(listener: Listener) {
         listeners -= listener
     }
 
-    fun playerMove(oldCoord: Coord, newCoord: Coord, visible: Array<DoubleArray>) {
+    override fun playerMove(oldCoord: Coord, newCoord: Coord, visible: Array<DoubleArray>) {
         listeners.forEach { it -> it.onPlayerMoveListener(oldCoord, newCoord, visible) }
     }
 
-    fun playerMoved(oldCoord: Coord, newCoord: Coord) {
+    override fun playerMoved(oldCoord: Coord, newCoord: Coord) {
         listeners.forEach { it -> it.onPlayerMovedListener(oldCoord, newCoord) }
     }
 
-    fun mobDead(id: String) {
+    override fun mobDead(id: String) {
         listeners.forEach { it -> it.onMobDead(id) }
     }
 
-    fun mobMove(id: String, oldCoord: Coord, newCoord: Coord) {
+    override fun mobMove(id: String, oldCoord: Coord, newCoord: Coord) {
         listeners.forEach { it -> it.onMobMoveListener(id, oldCoord, newCoord) }
     }
 
-    fun mobMoved(id: String, oldCoord: Coord, newCoord: Coord) {
+    override fun mobMoved(id: String, oldCoord: Coord, newCoord: Coord) {
         listeners.forEach { it -> it.onMobMovedListener(id, oldCoord, newCoord) }
     }
 
-    fun mobAttack(id: String) {
+    override fun mobAttack(id: String) {
         listeners.forEach { it -> it.onMobAttackListener(id) }
     }
 
-    fun playerAttack(playerCoord: Coord, mobCoord: Coord) {
+    override fun playerAttack(playerCoord: Coord, mobCoord: Coord) {
         listeners.forEach { it -> it.onPlayerAttackListener(playerCoord, mobCoord) }
     }
 
-    fun moveKeyPress(moveType: MoveType, alt: Boolean) {
+    override fun moveKeyPress(moveType: MoveType, alt: Boolean) {
         listeners.forEach { it -> it.onMoveKeyPressed(moveType, alt) }
     }
 
-    fun collision(oldCoord: Coord, newCoord: Coord) {
+    override fun collision(oldCoord: Coord, newCoord: Coord) {
         listeners.forEach { it -> it.onCollisionListener(oldCoord, newCoord) }
     }
 
-    fun interactWithItem(id: Item) {
+    override fun interactWithItem(id: Item) {
         listeners.forEach { it -> it.onItemInteraction(id) }
     }
 
-    fun raiseItem(item: Item) {
+    override fun raiseItem(item: Item) {
         listeners.forEach { it -> it.onRaisedItem(item) }
     }
 
-    fun dropItem(item: Item) {
+    override fun dropItem(item: Item) {
         listeners.forEach { it -> it.onDroppedItem(item) }
     }
 
-    fun drawInventory(inventory: Inventory) {
+    override fun drawInventory(inventory: Inventory) {
         listeners.forEach { it -> it.onDrawInventory(inventory) }
     }
 

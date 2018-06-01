@@ -1,16 +1,17 @@
 package core
 
-import com.badlogic.gdx.math.MathUtils.random
 import squidpony.squidgrid.FOV
 import squidpony.squidgrid.Radius
 import squidpony.squidmath.Coord
 
 class Player(private var coord: Coord,
              private var health: Int = 10,
-             private val level: Level) : Listener {
+             private val level: Level,
+             eventRouter: EventRouter) : Listener {
     val visible: Array<DoubleArray> = Array(level.wholeMapHeight, { it -> DoubleArray(level.wholeMapWidth) })
     private val mobsNearest: MutableMap<String, Coord> = mutableMapOf()
-    private val eventRouter: EventRouter = EventRouter
+    private val eventRouter: EventRouter = eventRouter
+
     init {
         FOV.reuseFOV(level.dungeon.resistance, visible, coord.x, coord.y, 5.0, Radius.CIRCLE)
     }
@@ -68,8 +69,8 @@ class Player(private var coord: Coord,
 
     override fun onItemInteraction(item: Item) {
         if (inventory.addItem(item)) {
-            EventRouter.raiseItem(item)
-            EventRouter.drawInventory(inventory)
+            eventRouter.raiseItem(item)
+            eventRouter.drawInventory(inventory)
         }
     }
 

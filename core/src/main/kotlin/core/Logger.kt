@@ -4,6 +4,10 @@ import squidpony.squidmath.Coord
 import java.io.PrintStream
 import java.io.PrintWriter
 
+
+/**
+ * Class for logging
+ */
 class Logger(out: PrintStream) : Listener {
     private val log = PrintWriter(out)
     override fun onPlayerMovedListener(oldCoord: Coord, newCoord: Coord) {
@@ -66,4 +70,5 @@ class Logger(out: PrintStream) : Listener {
         log.write("Num key pressed: $numKey \n")
         log.flush()
     }
+
 }

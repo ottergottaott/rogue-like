@@ -3,24 +3,23 @@ package core
 import com.badlogic.gdx.ApplicationAdapter
 import squidpony.squidmath.RNG
 
-class RoguelikeAppAdapter(val config: Configuration) : ApplicationAdapter() {
+class RoguelikeAppAdapter(val config: Configuration, val eventRouter: EventRouter) : ApplicationAdapter() {
     lateinit var render: RogueLikeRender
 
     override fun create() {
-        val level = firstLevel(config, RNG())
-        val player = Player(level.startPosition, level = level)
-        render = RogueLikeRender(level, player.visible, config)
+        val level = firstLevel(config, RNG(), eventRouter)
+        val player = Player(level.startPosition, level = level, eventRouter = eventRouter)
+        render = RogueLikeRender(level, player.visible, config, eventRouter)
 
-        EventRouter.subscribe(player)
-        EventRouter.subscribe(render)
-        EventRouter.subscribe(Logger(System.out))
+        eventRouter.subscribe(player)
+        eventRouter.subscribe(render)
+        eventRouter.subscribe(Logger(System.out))
         level.mobs.forEach { it ->
             run {
-                EventRouter.subscribe(it)
-                EventRouter.mobMoved(it.id, it.coord, it.coord)
+                eventRouter.subscribe(it)
+                eventRouter.mobMoved(it.id, it.coord, it.coord)
             }
         }
-
     }
 
     override fun render() {

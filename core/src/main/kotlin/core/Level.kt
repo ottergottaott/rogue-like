@@ -106,7 +106,7 @@ fun level(init: LevelBuilder.() -> Unit): Level {
     return LevelBuilder(init).build()
 }
 
-fun firstLevel(config: Configuration, rng: RNG): Level {
+fun firstLevel(config: Configuration, rng: RNG, eventRouter: EventRouter): Level {
     val dungeonGen: DungeonGenerator = DungeonGenerator(config.wholeMapWidth, config.wholeMapHeight, rng)
     val decoDungeon = dungeonGen.generate(TilesetType.MAZE_B)
 
@@ -143,9 +143,9 @@ fun firstLevel(config: Configuration, rng: RNG): Level {
     }
 
     levelToReturn.mobs.addAll(listOf(
-            SimpleWarrior("id2", startPosition.translate(1, 0), levelToReturn),
-            SimpleWarrior("id3", startPosition.translate(1, 1), levelToReturn),
-            SimpleWarrior("id4", startPosition.translate(2, 1), levelToReturn)))
+            SimpleWarrior("id2", startPosition.translate(1, 0), levelToReturn, eventRouter),
+            SimpleWarrior("id3", startPosition.translate(1, 1), levelToReturn, eventRouter),
+            SimpleWarrior("id4", startPosition.translate(2, 1), levelToReturn, eventRouter)))
     return levelToReturn
 }
 

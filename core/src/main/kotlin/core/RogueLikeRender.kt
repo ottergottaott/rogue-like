@@ -15,7 +15,7 @@ import java.util.*
 
 data class MobMoveAction(val id: String, val newCoord: Coord, val oldCoord: Coord)
 
-class RogueLikeRender(val level: Level, var visible: Array<DoubleArray>, var config: Configuration) : Listener {
+class RogueLikeRender(val level: Level, var visible: Array<DoubleArray>, var config: Configuration, mainRouter: EventRouter) : Listener {
     private val batch: SpriteBatch = SpriteBatch()
     private var stage: Stage
     private var display: SparseLayers
@@ -34,7 +34,7 @@ class RogueLikeRender(val level: Level, var visible: Array<DoubleArray>, var con
     private val awaitedMoves: ArrayList<Pair<Coord, Coord>>
     private val awaitedMobMoves: ArrayList<MobMoveAction> = arrayListOf()
 
-    private val eventRouter: EventRouter = EventRouter
+    private val eventRouter: EventRouter = mainRouter
 
     private var languageStage: Stage
 
@@ -86,9 +86,15 @@ class RogueLikeRender(val level: Level, var visible: Array<DoubleArray>, var con
                 "Lal3" to display.glyph('S', SColor.SAFETY_ORANGE.toFloatBits(), level.startPosition.x + 3, level.startPosition.y - 2)
         )
 
-        EventRouter.subscribe(SimpleShield("Lal1", Coord.get(level.startPosition.x + 1, level.startPosition.y + 3)))
-        EventRouter.subscribe(SimpleShield("Lal2", Coord.get(level.startPosition.x + 2, level.startPosition.y + 3)))
-        EventRouter.subscribe(SimpleShield("Lal3", Coord.get(level.startPosition.x + 3, level.startPosition.y - 2)))
+        eventRouter.subscribe(
+                SimpleShield("Lal1", Coord.get(level.startPosition.x + 1, level.startPosition.y + 3), eventRouter)
+        )
+        eventRouter.subscribe(
+                SimpleShield("Lal2", Coord.get(level.startPosition.x + 2, level.startPosition.y + 3), eventRouter)
+        )
+        eventRouter.subscribe(
+                SimpleShield("Lal3", Coord.get(level.startPosition.x + 3, level.startPosition.y - 2), eventRouter)
+        )
 
 
         display.setPosition(0f, 0f)
