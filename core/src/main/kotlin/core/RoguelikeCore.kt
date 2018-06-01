@@ -3,6 +3,9 @@ package core
 import com.badlogic.gdx.ApplicationAdapter
 import squidpony.squidmath.RNG
 
+/**
+ * Adapter for running main app
+ */
 class RoguelikeAppAdapter(val config: Configuration, val eventRouter: EventRouter) : ApplicationAdapter() {
     lateinit var render: RogueLikeRender
 

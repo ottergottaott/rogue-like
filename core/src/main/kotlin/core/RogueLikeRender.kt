@@ -15,6 +15,7 @@ import java.util.*
 
 data class MobMoveAction(val id: String, val newCoord: Coord, val oldCoord: Coord)
 
+/** UI renderer **/
 class RogueLikeRender(val level: Level, var visible: Array<DoubleArray>, var config: Configuration, mainRouter: EventRouter) : Listener {
     private val batch: SpriteBatch = SpriteBatch()
     private var stage: Stage

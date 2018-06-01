@@ -78,7 +78,7 @@ interface EventRouter {
  * Main router of events, every entity should be subscribed
  * to this router.
  */
-class MainRouter : EventRouter{
+open class MainRouter : EventRouter{
     private var listeners: List<Listener> = listOf()
 
     override fun numKeyPress(numKey: Int, alt: Boolean) {

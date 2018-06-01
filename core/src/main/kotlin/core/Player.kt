@@ -4,7 +4,10 @@ import squidpony.squidgrid.FOV
 import squidpony.squidgrid.Radius
 import squidpony.squidmath.Coord
 
-class Player(private var coord: Coord,
+/**
+ * Class for player
+ */
+class Player(var coord: Coord,
              private var health: Int = 10,
              private val level: Level,
              eventRouter: EventRouter) : Listener {

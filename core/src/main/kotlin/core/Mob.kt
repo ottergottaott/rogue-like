@@ -6,6 +6,9 @@ import squidpony.squidgrid.Radius
 import squidpony.squidmath.Coord
 import squidpony.squidmath.GreasedRegion
 
+/**
+ * Interface representing mob
+ */
 sealed class Mob(val id: String, var coord: Coord, var health: Int, val level: Level, val eventRouter: EventRouter) : Listener {
     val visible: Array<DoubleArray> = Array(level.wholeMapHeight, { it -> DoubleArray(level.wholeMapWidth) })
     val blockage: GreasedRegion
@@ -16,6 +19,9 @@ sealed class Mob(val id: String, var coord: Coord, var health: Int, val level: L
     }
 }
 
+/**
+ * Warrior with simple attack
+ */
 class SimpleWarrior(id: String, coord: Coord, level: Level, eventRouter: EventRouter)
     : Mob(id, coord, health = 5, level = level, eventRouter = eventRouter) {
     override fun onPlayerAttackListener(playerCoord: Coord, mobCoord: Coord) {
